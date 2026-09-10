@@ -26,7 +26,7 @@ public class TestIntPriorityQueue {
     }
 
     @Test
-    public void test_elementDoesNotRemove() {
+    public void test_elementDoesNotRemove() {//comprobamos que element no quite ningun integrante
         IntPriorityQueue queue = new IntPriorityQueue(10);
         queue.insertElement(9);
         queue.element();
@@ -104,7 +104,7 @@ public class TestIntPriorityQueue {
         IntPriorityQueue queue = new IntPriorityQueue(2);
         queue.insertElement(1);
         queue.insertElement(2);
-        queue.insertElement(3); // capacité initiale dépassée, redimensionnement attendu
+        queue.insertElement(3);
 
         assertEquals(3, queue.size());
         assertEquals(3, queue.popElement());
