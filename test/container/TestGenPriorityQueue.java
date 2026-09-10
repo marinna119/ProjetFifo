@@ -54,6 +54,7 @@ public class TestGenPriorityQueue {
         assertEquals(5, queue.popElement());
         assertEquals(3, queue.popElement());
         assertEquals(1, queue.popElement());
+        //comprobamos que la expresión booleana es true
         assertTrue(queue.isEmpty());
     }
 
@@ -103,7 +104,7 @@ public class TestGenPriorityQueue {
     @Test
     public void testPopOnEmptyQueueThrows() {
         GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10);
-
+        //comprobamos que lance la excepcion especifica en ese momento de codigo, popelement
         assertThrows(NoSuchElementException.class, () -> queue.popElement());
     }
 
@@ -115,7 +116,7 @@ public class TestGenPriorityQueue {
         queue.insertElement(2);
         queue.insertElement(3);
 
-        assertEquals(3, queue.size());
+        assertEquals(3, queue.size());//primero el valor que deberia salir, luego el que devuelve mi programa
         assertEquals(3, queue.popElement());
         assertEquals(2, queue.popElement());
         assertEquals(1, queue.popElement());

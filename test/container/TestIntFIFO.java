@@ -89,7 +89,7 @@ public class TestIntFIFO {
         IntFIFO queue = new IntFIFO(2);
         queue.insertElement(1);
         queue.insertElement(2);
-        queue.insertElement(3); // capacité initiale dépassée, redimensionnement attendu
+        queue.insertElement(3); // necesitamos mas espacio ahora, se espera que lo haga
 
         assertEquals(3, queue.size());
         assertEquals(1, queue.popElement());
@@ -102,9 +102,9 @@ public class TestIntFIFO {
         IntFIFO queue = new IntFIFO(3);
         queue.insertElement(1);
         queue.insertElement(2);
-        queue.popElement();      // libère la première case du tableau circulaire
+        queue.popElement();      // liberamos asi la primera casilla al ser circular
         queue.insertElement(3);
-        queue.insertElement(4);  // doit boucler sur le tableau
+        queue.insertElement(4);  // necesitamos que continue el bucle
 
         assertEquals(2, queue.popElement());
         assertEquals(3, queue.popElement());
