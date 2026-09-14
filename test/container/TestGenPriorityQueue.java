@@ -1,5 +1,7 @@
 package container;
 
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
@@ -10,10 +12,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestGenPriorityQueue {
+    //static-> solo lo creo una vez, compartido por todos test
+    //final porque no podemos reasignarle nada
+    //lo ultimo es lambda -> creamos un objeto que implementa comparator sin crear clase entera
+
+    private static final Comparator<Integer> natural_order= (a, b)->a-b;
 
     @Test
     public void testEmptyCreation() {
-        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10);
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10,natural_order);
 
         assertTrue(queue.isEmpty());
         assertEquals(0, queue.size());
@@ -21,7 +28,7 @@ public class TestGenPriorityQueue {
 
     @Test
     public void testInsertOneElement() {
-        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10);
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10, natural_order);
 
         queue.insertElement(5);
 
@@ -32,7 +39,7 @@ public class TestGenPriorityQueue {
 
     @Test
     public void testElementDoesNotRemove() {
-        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10);
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10, natural_order);
 
         queue.insertElement(9);
 
@@ -43,7 +50,7 @@ public class TestGenPriorityQueue {
 
     @Test
     public void testHighestPriorityFirst() {
-        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10);
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10, natural_order);
 
         queue.insertElement(5);
         queue.insertElement(1);
@@ -60,7 +67,7 @@ public class TestGenPriorityQueue {
 
     @Test
     public void testDuplicateValues() {
-        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10);
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10,natural_order);
 
         queue.insertElement(4);
         queue.insertElement(4);
@@ -73,7 +80,7 @@ public class TestGenPriorityQueue {
 
     @Test
     public void testSizeDecreasesAfterPop() {
-        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10);
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10, natural_order);
 
         queue.insertElement(1);
         queue.insertElement(2);
@@ -85,7 +92,7 @@ public class TestGenPriorityQueue {
 
     @Test
     public void testIsEmptyAfterPoppingAllElements() {
-        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10);
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10, natural_order);
 
         queue.insertElement(1);
         queue.popElement();
@@ -96,21 +103,21 @@ public class TestGenPriorityQueue {
 
     @Test
     public void testElementOnEmptyQueueThrows() {
-        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10);
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10, natural_order);
 
         assertThrows(NoSuchElementException.class, () -> queue.element());
     }
 
     @Test
     public void testPopOnEmptyQueueThrows() {
-        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10);
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(10, natural_order);
         //comprobamos que lance la excepcion especifica en ese momento de codigo, popelement
         assertThrows(NoSuchElementException.class, () -> queue.popElement());
     }
 
     @Test
     public void testResizeOnFullQueue() {
-        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(2);
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(2, natural_order);
 
         queue.insertElement(1);
         queue.insertElement(2);
@@ -120,6 +127,41 @@ public class TestGenPriorityQueue {
         assertEquals(3, queue.popElement());
         assertEquals(2, queue.popElement());
         assertEquals(1, queue.popElement());
+    }
+
+    @Test
+    public void test_iterator(){
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(5, natural_order);
+
+        queue.insertElement(1);
+        queue.insertElement(2);
+        queue.insertElement(3);
+        int count = 0;
+        Iterator<Integer> it= queue.iterator();
+        while(it.hasNext()) {
+            it.next();
+            count++;
+        }
+        assertEquals(3,count);
+    }
+
+    @Test
+    public void test_forEach(){
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(5, natural_order);
+
+        queue.insertElement(1);
+        queue.insertElement(2);
+        queue.insertElement(3);
+        int count = 0;
+        int sum=0;
+
+        Iterator<Integer> it= queue.iterator();
+        for( int value: queue){
+            sum+=value;
+            count++;
+        }
+        assertEquals(3,count);
+        assertEquals(6,sum);
     }
     
 }
