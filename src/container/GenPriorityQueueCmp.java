@@ -1,18 +1,21 @@
 package container;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E>{
+public class GenPriorityQueueCmp implements Queue<E>{
 
     private E queue[];
     private int capacity;//tamaño del array
     private int nb = 0;//numero de elementos actuales
+    private final Comparator<? super E> comparator;
 
 
-    public GenPriorityQueue(int capacity) {
+    public GenPriorityQueueCmp(int capacity,  Comparator<? super E> comparator) {
         this.capacity = capacity;
-        this.queue = (E[]) new Comparable[capacity];
+        this.queue = (E[]) new Object[capacity];
+        this.comparator= comparator;
 
     }
 
