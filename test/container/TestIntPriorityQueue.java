@@ -111,6 +111,42 @@ public class TestIntPriorityQueue {
         assertEquals(2, queue.popElement());
         assertEquals(1, queue.popElement());
     }
+    @Test
+    public void test_iterator(){
+        IntPriorityQueue queue = new IntPriorityQueue(5);//la creo con capacidad 5 y añado elementos
+        queue.insertElement(1);
+        queue.insertElement(2);
+        queue.insertElement(3);
+
+        Iterator<Integer> it= queue.iterator();
+        //comprobamos que recorra todos los elementos
+        int count=0;
+        while(it.hasNext()){
+            it.next();
+            count++;
+        }
+        assertEquals(3,count);
+    }
+
+    @Test
+    public void test_iterator_forEach(){//comprobamos que este bien especificado
+        IntPriorityQueue queue = new IntPriorityQueue(5);//la creo con capacidad 5 y añado elementos
+        queue.insertElement(1);
+        queue.insertElement(2);
+        queue.insertElement(3);
+
+        Iterator<Integer> it= queue.iterator();
+        int sum = 0;
+        int count=0;
+        for (int value:queue){
+            sum+=value;
+            count++;
+
+        }
+
+        assertEquals(3,count,"The number of elements is correct");
+        assertEquals(6,sum,"The sum is correct");
+    }
 
 
 }
