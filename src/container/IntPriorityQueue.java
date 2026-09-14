@@ -66,7 +66,20 @@ public class IntPriorityQueue implements Queue<Integer> {
 
     @Override
     public Iterator<Integer> iterator() {
-        return null;
+
+        return new Iterator<Integer>(){
+            private int i =0;
+
+            @Override//como anotacion de que lo implementamos, no es imprescindible que este
+            public boolean hasNext(){
+                return i<nb;//cuidado no coger el i++ porque iria sumando cada vez que lo llame
+            }
+            @Override
+            public Integer next(){
+                return List[i++];
+            }
+
+        };
     }
 
     private void subir_pos(int i){
@@ -83,7 +96,7 @@ public class IntPriorityQueue implements Queue<Integer> {
     private void descender(int i){
         while(true){
             int left= i * 2 + 1;
-            int right = i*2 + 1;
+            int right = i*2 + 2;
             int bigger= i;
 
             if(left<nb && List[left]> List[bigger]){
