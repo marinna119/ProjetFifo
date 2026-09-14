@@ -1,5 +1,6 @@
 package container;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestGenPriorityQueue {
+
+    
 
     @Test
     public void testEmptyCreation() {
@@ -120,6 +123,22 @@ public class TestGenPriorityQueue {
         assertEquals(3, queue.popElement());
         assertEquals(2, queue.popElement());
         assertEquals(1, queue.popElement());
+    }
+
+    @Test
+    public void test_iterator(){
+        GenPriorityQueue<Integer> queue = new GenPriorityQueue<>(5);
+
+        queue.insertElement(1);
+        queue.insertElement(2);
+        queue.insertElement(3);
+        int count = 0;
+        Iterator<Integer> it= queue.iterator();
+        while(it.hasNext()) {
+            it.next();
+            count++;
+        }
+        assertEquals(3,count);
     }
     
 }

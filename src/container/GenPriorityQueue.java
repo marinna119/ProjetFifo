@@ -1,18 +1,21 @@
 package container;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E>{
+public class GenPriorityQueue<E> implements Queue<E>{
 
     private E queue[];
     private int capacity;//tamaño del array
     private int nb = 0;//numero de elementos actuales
+    private final Comparator<? super E> comparator;
 
 
-    public GenPriorityQueue(int capacity) {
+    public GenPriorityQueue(int capacity,  Comparator<? super E> comparator) {
         this.capacity = capacity;
-        this.queue = (E[]) new Comparable[capacity];
+        this.queue = (E[]) new Object[capacity];
+        this.comparator= comparator;
 
     }
 
@@ -63,13 +66,24 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E>{
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<E>(){
+            private int i=0;
+            @Override
+            public boolean hasNext() {
+                return i<nb;
+            }
+
+            @Override
+            public E next() {
+                return queue[i++];
+            }
+        };
     }
 
     private void subir_pos(int i){
         while(i>0){
             int padre= (i-1)/2;//al coger int me quedo la parte entera
-            if(queue[i].compareTo(queue[padre])<=0){
+            if(comparator.compare(queue[i],queue[padre])<=0){
                 break;
             }
             intercambio(i,padre);
@@ -83,9 +97,9 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E>{
             int right = i*2 + 2;
             int bigger= i;
 
-            if(left<nb && queue[left].compareTo(queue[bigger])>0 ){
+            if(left<nb && comparator.compare(queue[left],queue[bigger])>0 ){
                 bigger = left;
-            }if(right < nb && queue[right].compareTo(queue[bigger])>0){
+            }if(right < nb && comparator.compare(queue[right],queue[bigger])>0){
                 bigger = right;
             }
             if(bigger == i){
