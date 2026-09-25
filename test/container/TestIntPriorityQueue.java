@@ -15,6 +15,16 @@ public class TestIntPriorityQueue {
         assertTrue(queue.isEmpty());
         assertEquals(0, queue.size());
     }
+    //Programación defensiva -> no acepto capacidad invalida
+    @Test
+    public void test_constructorWithZero(){
+        assertThrows(IllegalArgumentException.class,()->new IntPriorityQueue(0));
+    }
+
+    @Test
+    public void test_constructorWithNegative(){
+        assertThrows(IllegalArgumentException.class,()->new IntPriorityQueue(-5));
+    }
 
     @Test
     public void test_insertOneElement() {
@@ -146,6 +156,18 @@ public class TestIntPriorityQueue {
 
         assertEquals(3,count,"The number of elements is correct");
         assertEquals(6,sum,"The sum is correct");
+    }
+
+    //que cuando no haya mas, next lance exception
+    @Test
+    public void test_nextOnExhaustedIteratorThrows() {
+        IntPriorityQueue queue = new IntPriorityQueue(5);
+        queue.insertElement(1);
+
+        Iterator<Integer> it = queue.iterator();
+        it.next(); // consomme l'unique élément
+        assertFalse(it.hasNext());
+        assertThrows(NoSuchElementException.class, it::next);
     }
 
 

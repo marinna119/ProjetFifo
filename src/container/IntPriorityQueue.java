@@ -8,26 +8,36 @@ import java.util.NoSuchElementException;
 //tras quitar la raiz que descienda
 //intercambio una vez sube/baja
 
+/**
+ * File de priotité d'entiers, représentée par un tas stocké dans un tableau, où tout
+ * noeud a une valeur supérieure ou égale à celle de ses fils. L'élément de plus haute
+ * priorité (le plus grand) se trouve toujous à la racine (indice 0)
+ */
+
+
 public class IntPriorityQueue implements Queue<Integer> {
 
     private Integer List[];
-    private int capacity;//tamaño del array
     private int nb = 0;//numero de elementos actuales
 
+    /**
+     * Construit une file de priorité vide avec la capacité initiale donnée
+     *
+     * @param capacity capacité initiale du tableau interne, strictement positive
+     * @throws IllegalArgumentException si capacity est négative ou nulle
+     */
     public IntPriorityQueue(int capacity) {
-        this.capacity = capacity;
+        if(capacity<=0){
+            throw new IllegalArgumentException("capacity must be strictly positive");
+        }
         this.List = new Integer[capacity];
     }
 
+
     @Override
     public boolean insertElement(Integer integer) {
-        if (nb == capacity) {
-            Integer[] newList = new Integer[capacity * 2];//duplico la capacidad
-            for (int i = 0; i < nb; i++) {
-                newList[i] = List[i];
-            }
-            List = newList;//actualizo mi lista
-            capacity = capacity * 2;
+        if (nb == List.length) {
+            alargarFila(List.length * 2);
         }
         List[nb] = integer;//lo añado al final
         nb++;
@@ -82,6 +92,28 @@ public class IntPriorityQueue implements Queue<Integer> {
         };
     }
 
+    /**
+     * Agrandit le tableau interne à la nouvelle capacité donnée, en conservant tous les
+     * éléments déjà présents. Cette méthode est appelé automatiquement par insertElement
+     * lorsque la file est pleine
+     *
+     * @param newCapacity nouvelle capacité du tableau interne, doit être strictement
+     *                    supérieure au nombre d'éléments courant
+     */
+    public void alargarFila(int newCapacity){
+        Integer[] newList = new Integer[newCapacity];//duplico la capacidad
+        for (int i = 0; i < nb; i++) {
+            newList[i] = List[i];
+        }
+        List = newList;//actualizo mi lista
+    }
+
+    /**
+     * Fait remonter l'élément à l'indice donné tant qu'il est plus grand que
+     * son père, pour restaurer l'invariant de tas après une insertion
+     * @param i indice de l'élément à faire remonter
+     */
+
     private void subir_pos(int i){
         while(i>0){
             int padre= (i-1)/2;//al coger int me quedo la parte entera
@@ -92,7 +124,14 @@ public class IntPriorityQueue implements Queue<Integer> {
             i= padre;
         }
     }
-    //CREAR CON MAVEN IMPORTANTE PARA TEST -- CORREGIR
+    //CREAR CON MAVEN IMPORTANTE PARA TEST
+
+    /**
+     * Fait descendre l'élément à l'indice donné en l'echangeant avec le plus grand de ses
+     * fils tant que l'invariant de tas n'est pas respecté, pour restaurer l'invariant
+     * après un retrait de la racine
+     * @param i indice de l'élément à faire descendre
+     */
     private void descender(int i){
         while(true){
             int left= i * 2 + 1;
@@ -113,6 +152,11 @@ public class IntPriorityQueue implements Queue<Integer> {
 
     }
 
+    /**
+     * Échange les éléments aux deux indices donnés dans le tableau interne
+     * @param i premier indice
+     * @param padre second indice
+     */
     private void intercambio(int i,int padre){
         Integer elem = List[i];//lo copio para no perderlo
         List[i]=List[padre];

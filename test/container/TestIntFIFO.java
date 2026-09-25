@@ -111,5 +111,46 @@ public class TestIntFIFO {
         assertEquals(4, queue.popElement());
     }
 
+    @Test
+    public void test_resizeWhileCircularStateAlreadyWrapped(){
+        //lo ha dicho el profesor -> le resize doit rester correct quand is survient
+        //alors que out n'est plus à l'indice 0
+        //buffer ya ha recorrido un bucle al menos una vez antes de que se active el redimensionamiento
+        IntFIFO queue= new IntFIFO(3);
+        queue.insertElement(1);
+        queue.insertElement(2);
+        queue.insertElement(3);
+        queue.popElement();//out=1
+        queue.insertElement(4);//[4,2,3] out=1
+        queue.popElement();//out=2
+        queue.insertElement(5);//[4,5,3], out=2, in=2
+        queue.insertElement(6);//redimensionamiento activado con out=2 (estado "envuelto")
+
+        assertEquals(4, queue.size());
+        assertEquals(3, queue.popElement());
+        assertEquals(4, queue.popElement());
+        assertEquals(5, queue.popElement());
+        assertEquals(6, queue.popElement());
+    }
+
+    @Test
+    public void test_nextOnExhaustedThrows(){
+        //el iterador no puede llamar next si ha acabado, excepcion
+        IntFIFO queue= new IntFIFO(10);
+        queue.insertElement(1);
+
+        Iterator<Integer> it= queue.iterator();
+        it.next();//pasa el unico elemento
+        assertFalse(it.hasNext());//verificamos que el iterador sepa que no hay mas
+        assertThrows(NoSuchElementException.class, it::next);//comprobamos que sse lance excepción
+    }
+
+    @Test
+    public void test_iteratorOnEmptyQueue() {
+        IntFIFO queue = new IntFIFO(10);
+        Iterator<Integer> it = queue.iterator();
+        assertFalse(it.hasNext());
+    }
+
 
 }
