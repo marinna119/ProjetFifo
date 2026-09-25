@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 public class IntFIFO implements Queue<Integer> {
 
     //PARA LOS MÉTODOS QUE NO HEREDO DE LA INTERFAZ DEBO EXPLICARLOS BIEN AQUÍ CON COMENTARIOS (JAVADOC) -> CONSTRUCTOR Y ALARGAR
-
+// ahora
     private Integer List[];
     //private int capacity;//tamaño del array -- ES REDUNDANTE
     private int in = 0;//indice para proximo elemento insertado
