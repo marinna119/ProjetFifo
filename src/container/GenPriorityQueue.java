@@ -1,62 +1,64 @@
 package container;
 
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class GenPriorityQueue<E> implements Queue<E>{
+/**
+ * File de priorité générique, représentée par un tas (max-heap) stocké
+ * dans un tableau. Le type d'élément doit implémenter {@link Comparable}
+ * pour définir l'ordre de priorité.
+ *
+ * @param <E> type des éléments stockés, comparables entre eux
+ */
+public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
-    private E queue[];
-    private int capacity;//tamaño del array
-    private int nb = 0;//numero de elementos actuales
-    private final Comparator<? super E> comparator;
+    private E[] lista;
+    private int nb = 0;
 
+    /**
+     * Construit une file de priorité vide avec la capacité initiale donnée.
+     *
+     * @param capacity capacité initiale du tableau interne ; doit être strictement positive
+     * @throws IllegalArgumentException si capacity est négative ou nulle
+     */
 
-    public GenPriorityQueue(int capacity,  Comparator<? super E> comparator) {
-        this.capacity = capacity;
-        this.queue = (E[]) new Object[capacity];
-        this.comparator= comparator;
-
+    public GenPriorityQueue(int capacity) {
+        if (capacity <= 0) {
+            throw new IllegalArgumentException("capacity must be strictly positive");
+        }
+        this.lista = (E[]) new Object[capacity];
     }
 
     @Override
     public boolean insertElement(E e) {
-        if (nb == capacity) {
-            E[] newQueue = (E[]) new Comparable[capacity * 2];//duplico la capacidad
-            for (int i = 0; i < nb; i++) {
-                newQueue[i] = queue[i];
-            }
-            queue = newQueue;//actualizo mi lista
-            capacity = capacity * 2;
+        if (nb == lista.length) {
+            alargar(lista.length * 2);
         }
-        queue[nb] = e;//lo añado al final
+        lista[nb] = e;
         nb++;
-        subir_pos(nb - 1);//compruebo si tiene que subir
+        subir(nb - 1);
         return true;
     }
 
     @Override
-    public E element() {//ME DEBE DEVOLVER EL ELEMENTO MAS ALTO
-        if (isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        return queue[0];
+    public E element() {
+        if (isEmpty()) throw new NoSuchElementException();
+        return lista[0];
     }
 
     @Override
-    public E popElement() {//siempre devuelvo el primero que es el mas alto
-        E e = element();//consigo el + alto
+    public E popElement() {
+        E e = element();
         nb--;
-        queue[0] = queue[nb];
-        queue[nb] = null;//aqui lo elimino
-        descender(0);//para que vuelva a su posicion correcta
+        lista[0] = lista[nb];
+        lista[nb] = null;
+        descender(0);
         return e;
-
     }
 
     @Override
     public boolean isEmpty() {
-        return nb==0;
+        return nb == 0;
     }
 
     @Override
@@ -64,57 +66,69 @@ public class GenPriorityQueue<E> implements Queue<E>{
         return nb;
     }
 
+    /**
+     * Agrandit le tableau interne à la nouvelle capacité donnée, en
+     * conservant tous les éléments déjà présents. Appelée automatiquement
+     * par insertElement lorsque la file est pleine.
+     *
+     * @param newCapacity nouvelle capacité du tableau interne
+     */
+
+    public void alargar(int newCapacity) {
+        E[] newHeap = (E[]) new Object[newCapacity];
+        for (int i = 0; i < nb; i++) {
+            newHeap[i] = lista[i];
+        }
+        lista = newHeap;
+    }
+
+    private void subir(int i) {
+        while (i > 0) {
+            int parent = (i - 1) / 2;
+            if (lista[i].compareTo(lista[parent]) <= 0) break;
+            intercambio(i, parent);
+            i = parent;
+        }
+    }
+
+    private void descender(int i) {
+        while (true) {
+            int gauche = 2 * i + 1;
+            int droite = 2 * i + 2;
+            int plusGrand = i;
+
+            if (gauche < nb && lista[gauche].compareTo(lista[plusGrand]) > 0) plusGrand = gauche;
+            if (droite < nb && lista[droite].compareTo(lista[plusGrand]) > 0) plusGrand = droite;
+            if (plusGrand == i) break;
+
+            intercambio(i, plusGrand);
+            i = plusGrand;
+        }
+    }
+
+    private void intercambio(int i, int j) {
+        E tmp = lista[i];
+        lista[i] = lista[j];
+        lista[j] = tmp;
+    }
+
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>(){
-            private int i=0;
+        return new Iterator<E>() {
+            private int i = 0;
+
             @Override
             public boolean hasNext() {
-                return i<nb;
+                return i < nb;
             }
 
             @Override
             public E next() {
-                return queue[i++];
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return lista[i++];
             }
         };
-    }
-
-    private void subir_pos(int i){
-        while(i>0){
-            int padre= (i-1)/2;//al coger int me quedo la parte entera
-            if(comparator.compare(queue[i],queue[padre])<=0){
-                break;
-            }
-            intercambio(i,padre);
-            i= padre;
-        }
-    }
-
-    private void descender(int i){
-        while(true){
-            int left= i * 2 + 1;
-            int right = i*2 + 2;
-            int bigger= i;
-
-            if(left<nb && comparator.compare(queue[left],queue[bigger])>0 ){
-                bigger = left;
-            }if(right < nb && comparator.compare(queue[right],queue[bigger])>0){
-                bigger = right;
-            }
-            if(bigger == i){
-                break;
-            }
-            intercambio(i,bigger);
-            i= bigger;
-        }
-
-    }
-
-    private void intercambio(int i,int padre){
-        E elem = queue[i];//lo copio para no perderlo
-        queue[i]=queue[padre];
-        queue[padre]= elem;
-
     }
 }
