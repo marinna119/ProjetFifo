@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 public class GenPriorityQueueCmp<E> implements Queue<E>{
 
     private E queue[];
-    private int nb = 0;//numero de elementos actuales
+    private int nb = 0;//number of actual elements
     private final Comparator<? super E> comparator;
 
 
@@ -20,12 +20,19 @@ public class GenPriorityQueueCmp<E> implements Queue<E>{
 
     }
 
+    /**
+     * Agrandit le tableau interne à la nouvelle capacité donnée, en
+     * conservant tous les éléments déjà présents. Appelée automatiquement
+     * par insertElement lorsque la file est pleine.
+     *
+     * @param newCapacity nouvelle capacité du tableau interne
+     */
     public void alargar(int newCapacity){
-        E[] newQueue = (E[]) new Comparable[newCapacity];//duplico la capacidad
+        E[] newQueue = (E[]) new Comparable[newCapacity];//I will double the capacity
         for (int i = 0; i < nb; i++) {
             newQueue[i] = queue[i];
         }
-        queue = newQueue;//actualizo mi lista
+        queue = newQueue;//I update my list
     }
 
     @Override
@@ -33,14 +40,14 @@ public class GenPriorityQueueCmp<E> implements Queue<E>{
         if (nb == queue.length) {
            alargar(queue.length *2);
         }
-        queue[nb] = e;//lo añado al final
+        queue[nb] = e;//I add it to the final place
         nb++;
-        subir_pos(nb - 1);//compruebo si tiene que subir
+        subir_pos(nb - 1);
         return true;
     }
 
     @Override
-    public E element() {//ME DEBE DEVOLVER EL ELEMENTO MAS ALTO
+    public E element() {//it must turn me out the higher element
         if (isEmpty()) {
             throw new NoSuchElementException();
         }
@@ -48,12 +55,12 @@ public class GenPriorityQueueCmp<E> implements Queue<E>{
     }
 
     @Override
-    public E popElement() {//siempre devuelvo el primero que es el mas alto
-        E e = element();//consigo el + alto
+    public E popElement() {//I always turn out the higher which is the first one
+        E e = element();//I have the higher one
         nb--;
         queue[0] = queue[nb];
-        queue[nb] = null;//aqui lo elimino
-        descender(0);//para que vuelva a su posicion correcta
+        queue[nb] = null;//I erease it
+        descender(0);//now it's at its correct position
         return e;
 
     }
@@ -91,7 +98,7 @@ public class GenPriorityQueueCmp<E> implements Queue<E>{
      */
     private void subir_pos(int i){
         while(i>0){
-            int padre= (i-1)/2;//al coger int me quedo la parte entera
+            int padre= (i-1)/2;//I only want the integer part
             if(comparator.compare(queue[i],queue[padre])<=0){
                 break;
             }
@@ -134,7 +141,7 @@ public class GenPriorityQueueCmp<E> implements Queue<E>{
      * @param padre indice du second élément
      */
     private void intercambio(int i,int padre){
-        E elem = queue[i];//lo copio para no perderlo
+        E elem = queue[i];//I save it
         queue[i]=queue[padre];
         queue[padre]= elem;
 
