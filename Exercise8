@@ -1,0 +1,15 @@
+1 - Non, pas nécessairement. Un tas est une structure de données optimisée uniquement
+pour garantir que l'élément à la racine est le maximum absolu. Il ne conserve pas l'ordre
+temporel d'insertion pour éléments qui partagent la même priorité. Lors des opérations comment
+monter et descendre, deux éléments ayant une priorité identique peuvent échanger leurs
+places de manière arbitraire par rapport à leur ordre d'arrivée.
+
+2- Une alternative lorsque le nombre de priorités est faible et borné est d'outiliser
+un tableau de files FIFO, un tableau de taille k où chaque indice représente un niveau
+de priorité et contient sa propre file FIFO d'éléments.
+
+3- Non, ce n'est pas possible. L'interface Queue n'expose que des méthodes comportementales
+de hay niveau. Aucune de ces méthodes ne permet de manipuler directement les indices ou de
+modifier l'interne du tableau de stockage. Les opérations de modification sont strictement
+encapsulées à l'interieur de la classe et appliquent systématiquement les règles de réequilibrage.
+protégeant ainsi l'invariant de classe.
