@@ -83,7 +83,12 @@ public class GenPriorityQueueCmp<E> implements Queue<E>{
             }
         };
     }
-
+    /**
+     * Fait remonter l'élément à l'indice donné tant qu'il est strictement
+     * plus grand que son père, pour restaurer l'invariant de tas après une insertion.
+     *
+     * @param i indice de l'élément à faire remonter
+     */
     private void subir_pos(int i){
         while(i>0){
             int padre= (i-1)/2;//al coger int me quedo la parte entera
@@ -94,6 +99,14 @@ public class GenPriorityQueueCmp<E> implements Queue<E>{
             i= padre;
         }
     }
+
+    /**
+     * Fait descendre l'élément à l'indice donné en l'échangeant avec le
+     * plus grand de ses fils tant qu'un de ses fils lui est strictement
+     * supérieur, pour restaurer l'invariant de tas après un retrait de la racine.
+     *
+     * @param i indice de l'élément à faire descendre
+     */
 
     private void descender(int i){
         while(true){
@@ -114,7 +127,12 @@ public class GenPriorityQueueCmp<E> implements Queue<E>{
         }
 
     }
-
+    /**
+     * Échange les éléments situés aux deux indices donnés du tableau interne.
+     *
+     * @param i indice du premier élément
+     * @param padre indice du second élément
+     */
     private void intercambio(int i,int padre){
         E elem = queue[i];//lo copio para no perderlo
         queue[i]=queue[padre];

@@ -82,6 +82,13 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         lista = newHeap;
     }
 
+    /**
+     * Fait remonter l'élément à l'indice donné tant qu'il est strictement
+     * plus grand que son père, pour restaurer l'invariant de tas après une insertion.
+     *
+     * @param i indice de l'élément à faire remonter
+     */
+
     private void subir(int i) {
         while (i > 0) {
             int parent = (i - 1) / 2;
@@ -90,6 +97,14 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
             i = parent;
         }
     }
+
+    /**
+     * Fait descendre l'élément à l'indice donné en l'échangeant avec le
+     * plus grand de ses fils tant qu'un de ses fils lui est strictement
+     * supérieur, pour restaurer l'invariant de tas après un retrait de la racine.
+     *
+     * @param i indice de l'élément à faire descendre
+     */
 
     private void descender(int i) {
         while (true) {
@@ -105,7 +120,12 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
             i = plusGrand;
         }
     }
-
+    /**
+     * Échange les éléments situés aux deux indices donnés du tableau interne.
+     *
+     * @param i indice du premier élément
+     * @param j indice du second élément
+     */
     private void intercambio(int i, int j) {
         E tmp = lista[i];
         lista[i] = lista[j];
