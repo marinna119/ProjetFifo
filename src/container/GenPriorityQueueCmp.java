@@ -28,7 +28,7 @@ public class GenPriorityQueueCmp<E> implements Queue<E>{
      * @param newCapacity nouvelle capacité du tableau interne
      */
     public void alargar(int newCapacity){
-        E[] newQueue = (E[]) new Comparable[newCapacity];//I will double the capacity
+        E[] newQueue = (E[]) new Object[newCapacity];//I will double the capacity
         for (int i = 0; i < nb; i++) {
             newQueue[i] = queue[i];
         }
@@ -37,6 +37,10 @@ public class GenPriorityQueueCmp<E> implements Queue<E>{
 
     @Override
     public boolean insertElement(E e) {
+        if(e==null){
+            throw new NullPointerException();
+        }
+
         if (nb == queue.length) {
            alargar(queue.length *2);
         }
@@ -86,6 +90,9 @@ public class GenPriorityQueueCmp<E> implements Queue<E>{
 
             @Override
             public E next() {
+                if(!hasNext()){
+                    throw new NoSuchElementException();
+                }
                 return queue[i++];
             }
         };
