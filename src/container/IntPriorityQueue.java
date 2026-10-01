@@ -86,6 +86,9 @@ public class IntPriorityQueue implements Queue<Integer> {
             }
             @Override
             public Integer next(){
+                if(!hasNext()){
+                    throw new NoSuchElementException();
+                }
                 return List[i++];
             }
 

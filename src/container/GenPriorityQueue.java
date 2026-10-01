@@ -26,7 +26,7 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
         if (capacity <= 0) {
             throw new IllegalArgumentException("capacity must be strictly positive");
         }
-        this.lista = (E[]) new Object[capacity];
+        this.lista = (E[]) new Comparable[capacity];//MUY IMPORTANTEPONER COMPARABLE
     }
 
     @Override
@@ -75,7 +75,7 @@ public class GenPriorityQueue<E extends Comparable<E>> implements Queue<E> {
      */
 
     public void alargar(int newCapacity) {
-        E[] newHeap = (E[]) new Object[newCapacity];
+        E[] newHeap = (E[]) new Comparable[newCapacity];
         for (int i = 0; i < nb; i++) {
             newHeap[i] = lista[i];
         }
